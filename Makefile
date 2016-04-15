@@ -1,51 +1,54 @@
-### Programas
-CXX = g++
-DELETAR = /bin/dicionario
+# ----------------------
+# MACROS
+# ----------------------
 
-### Variáveis
-#DEPURA = -ggdb
-AVISA = -Wall
-#PROFILA = -pg
-#OTIMIZA = -O2
-PADRAO_LINGUAGEM = c++11  #c++0x  # c++98
-BIBLIOTECA_PADRAO = libc++
-#BIBLIOTECAS = -lm
+# DIRS
+INCDIR = include
+BINDIR = bin
+SRCDIR = src
+BUILDDIR = build
+LIBDIR = lib
+# LIB OPTIONS
+# TARGET
+TARGET = $(BINDIR)/dicionario
+# EXTENSIONS
+SRCEXT = cpp
+HEADEREXT = h
+# SOURCES LIST
+SOURCES = $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+# OBJECTS
+OBJS = $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
+# COMPILER
+CC = g++
+# FOR CLEANING
+RM = /bin/rm
+# WARNING FLAG
+WARN = -Wall
+# DEBUG FLAGS
+DEBUG = -g
+# LINKING FLAGS
+# LIBOPTS = -lsfml-system -lsfml-window -lsfml-graphics -lsfml-audio
+# LIBFLAG = -L $(LIBDIR) $(LIBOPTS)
+INCFLAG = -I $(INCDIR)
+LFLAGS = $(DEBUG) $(WARN) $(INCFLAG) $(LIBFLAG)
+# COMPILATION FLAGS
+CFLAGS = $(DEBUG) -c $(WARN) -std=c++11
 
+# ----------------------
+# ENTRIES
+# ----------------------
 
-### Diretórios
-#DIRBIBLIOTECAS = -L/opt/local/lib
-DIREXECUTAVEL = bin
-DIRFONTE = src
-DIRINCLUDE = include
-DIRDECLARACOES = -I. -I $(DIRINCLUDE) -I $(DIRFONTE)
+$(TARGET): $(OBJS)
+	@echo "Linking..."
+	@echo " $(CC) $^ -o $(TARGET) "; $(CC) $^ -o $(TARGET)
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(BUILDDIR)
+	@echo " $(CC) $(CFLAGS) $(INCFLAG) -o $@ $<"; $(CC) $(CFLAGS) $(INCFLAG) -o $@ $<
 
-### Flags de compilação
-CFLAGS = $(AVISA) $(DEPURA)$ $(PROFILA) $(OTIMIZA) -std=$(PADRAO_LINGUAGEM)
-
-### Flags de linkedição
-LFLAGS = $(AVISA) $(DIRBIBLIOTECAS) $(BIBLIOTECAS) -stdlib=$(BIBLIOTECA_PADRAO)
-
-### Dependências
-OBJS = $(DIREXECUTAVEL)/drive_arraylist.o # outras ...
-
-### Entradas
-# a primeira entrada eh para o programa alvo
-dicionario: $(OBJS)
-	@echo ">>> Gerando executavel."
-	$(CXX) $(LFLAGS) $(OBJS) -o $(DIREXECUTAVEL)/dicionario
-
-# essa entrada define como produzir o arquivo
-#Classe_LLSeq.o: Classe_LLSeq.cpp Classe_LLSeq.h
-$(DIREXECUTAVEL)/drive_arraylist.o: $(DIRFONTE)/drive_arraylist.cpp $(DIRINCLUDE)/dal.h $(DIRINCLUDE)/dal.inl
-	@echo ">>> Compilando dependencias."
-	$(CXX) $(CFLAGS) $(DIRDECLARACOES) -c $(DIRFONTE)/drive_arraylist.cpp  \
-	    -o $(DIREXECUTAVEL)/drive_arraylist.o
-
-$(DIRINCLUDE)/dal.h: $(DIRINCLUDE)/dal.inl
-
-# a entrada seguinte elimina os arquivos inuteis.
+# DUMMY ENTRIES
 clean:
-	@echo ">>> Limpando projeto."
-	$(DELETAR) $(DIREXECUTAVEL)/*.o $(DIRFONTE)/*~ \
-	   $(DIRINCLUDE)/*~ $(DIREXECUTAVEL)/dicionario
+	@echo "Cleaning..."
+	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
+
+.PHONY: clean
 

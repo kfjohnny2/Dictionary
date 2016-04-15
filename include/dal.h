@@ -1,12 +1,7 @@
 /**
- * Definition of a class that implements a dictionary based on array.
- * This is a template class, where we need to specify the type
- * of key (unique) and the type of information we need to store
- * in the dictionary.
- *
- * Author: Selan Santos
- * Date: March 25th, 2015
- * Uptaded on: April 2016.
+ * Class and Methods from the non-sorted DAL
+ * Author: Johnnylee Bryan
+ * Created on: April 2016.
  * */
 
 #ifndef _DAL_H_
@@ -46,8 +41,10 @@ class DAL
         bool insert( const Key & _novaId, const Data & _novaInfo ); // Insere na lista.
         Key min() const; // Recupera a menor chave do dicionário .
         Key max() const; // Recupera a maior chave do dicionário.
-        // Recupera em _y a chave antecessora a _x , se existir ( true ).
+        // Recupera em _y a chave predecessora a _x , se existir ( true ).
         bool sucessor(const Key & _x, Key & _y) const;
+        // Recupera em _y a chave antecessora a _x , se existir ( true ).
+        bool predecessor(const Key & _x, Key & _y) const;
         //! Sobrecarga do operador <<, que faz com que seja impresso o conteudo da lista.
         /*! @param _os Output stream, normalmente o <CODE>cout</code>.
          *  @param _oList A lista a ser impressa.

@@ -12,14 +12,11 @@
 #include <stdexcept>
 
 #include "dal.h"
-
-
-
+#include "dsal.h"
 
 int main ( )
 {
     DAL< int, std::string  >  myList( 50 ); // Lista de no máximo 50 elementos.
-    int max, min;
     int y = 0;
 	try{
 	    myList.insert( 15, "dado 1" );
@@ -29,8 +26,10 @@ int main ( )
 		std::cout << "EXCEPTION! " << e.what() << std::endl;
 	}
 
-    myList.sucessor(2, y);
+    myList.sucessor(15, y);
     cout << "sucessor MAIN: " << y << endl;
+    myList.predecessor(8, y);
+    cout << "predecessor MAIN: " << y << endl;
     std::cout << "\n>>> myList: " << myList << std::endl;
 
     std::cout << "\n>>> Normal ending...\n\n";
